@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consent Form and Survey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=San+Francisco+Display:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'San Francisco Display', Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            font-size: 24px;
+            border-bottom: 1px solid #cccccc;
+        }
+
+        #content {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #survey-form {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+        }
+
+        .question p {
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .consent-text {
+            font-size: 15px;
+            color: #555;
+        }
+
+        .consent-text strong {
+            font-weight: bold;
+        }
+
+        .email-text {
+            font-family: 'Courier New', Courier, monospace;
+            /* You can replace this with any font you prefer */
+            /* font-size: 18px; */
+            font-weight: bold;
+            /* color: #007bff; */
+            /* Optional: Change the color */
+        }
+
+        .radio-group,
+        .input-group {
+            margin-top: 15px;
+        }
+
+        .input-group input {
+            width: 40%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+
+        .radio-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #submit-button {
+            padding: 15px 20px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #submit-button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+        }
+
+        #video-container {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+        }
+
+        #video-container h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        #rules-video {
+            max-width: 100%;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <header id="session-header"></header>
+    <div id="content">
+        <form id="survey-form">
+            <div class="question">
+                <div class="consent-text">
+                    <p>Hi <strong id="alias"></strong>,</p>
+                    <p id="game-details"></p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;After gameplay, you will complete <strong>7
+                            questions</strong> about your
+                        experience during this
+                        interaction.</p>
+                </div>
+            </div>
+
+            <!-- Add the video player here -->
+            <div id="video-container">
+                <p>Click the video below to play/pause and learn the game rules before proceeding. </p>
+                <video id="rules-video" controls width="100%" max-width="700px">
+                    <source src="gnomes_at_night_rules.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <button type="submit" id="submit-button">Start Session</button>
+        </form>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        const session = getQueryParam('session');
+        const method = getQueryParam('method');
+        const alias = getQueryParam('alias');
+
+        let agent_name = null;
+        if (method === 'heuristic') {
+            agent_name = 'Alice';
+        } else if (method === 'single_step') {
+            agent_name = 'Bob';
+        } else if (method === 'multi_step') {
+            agent_name = 'Charlie';
+        }
+
+        // Update the header and content dynamically
+        document.getElementById('alias').innerText = alias;
+        document.getElementById('session-header').innerText = `Session ${session}: Agent ${agent_name}`;
+        document.getElementById('game-details').innerHTML = `&nbsp;&nbsp;&nbsp;&nbsp;You will play Gnomes at Night with <strong>Agent ${agent_name}</strong> for <strong>3 rounds</strong>. Each round will last <strong>3 minutes</strong>.`;
+
+        // Get references to the video and submit button
+        const video = document.getElementById('rules-video');
+        const submitButton = document.getElementById('submit-button');
+
+        // Function to enable the submit button
+        function enableSubmitButton() {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Start Session';
+            submitButton.style.backgroundColor = '#007bff';
+            submitButton.style.cursor = 'pointer';
+        }
+
+        // Function to disable the submit button
+        function disableSubmitButton() {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Please watch the video first';
+            submitButton.style.backgroundColor = '#cccccc';
+            submitButton.style.cursor = 'not-allowed';
+        }
+
+        // Show the video player only if session is 1
+        if (session === '1') {
+            document.getElementById('video-container').style.display = 'block';
+            disableSubmitButton();
+
+            let preventSeek = true; // To track if seeking is allowed
+
+            // Hide native video controls
+            video.controls = false;
+
+            // Add click event to play/pause video
+            video.addEventListener('click', function () {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            });
+
+            // Disable seeking
+            video.addEventListener('seeking', function () {
+                if (preventSeek) {
+                    video.currentTime = video.lastTime; // Revert to the last valid time
+                }
+            });
+
+            // Track the last valid time while the video plays
+            video.addEventListener('timeupdate', function () {
+                video.lastTime = video.currentTime;
+            });
+
+            // Enable submit button and show full controls when video ends
+            video.addEventListener('ended', function () {
+                preventSeek = false;
+                video.controls = true;
+                enableSubmitButton();
+            });
+
+            // Change cursor to pointer when hovering over video
+            video.style.cursor = 'pointer';
+
+        } else {
+            document.getElementById('video-container').style.display = 'none';
+            enableSubmitButton();
+        }
+
+        // Ensure all required fields are filled before redirecting
+        document.getElementById('survey-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission to allow validation
+            const form = event.target;
+
+            // Check if the form is valid
+            if (form.checkValidity()) {
+                // Redirect to next page
+                window.location.href = `game.html?session=${session}&alias=${alias}&method=${method}`;
+            } else {
+                // If the form is invalid, trigger native form validation UI
+                form.reportValidity();
+            }
+        });
+    </script>
+</body>
+
+</html>

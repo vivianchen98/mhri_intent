@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=San+Francisco+Display:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'San Francisco Display', Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            font-size: 24px;
+            border-bottom: 1px solid #cccccc;
+        }
+
+        #content {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #thank-you-message {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+        }
+
+        .message p {
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        #submit-button {
+            padding: 15px 20px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #submit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="session-header"></header>
+    <div id="content">
+        <div id="thank-you-message">
+            <div class="message">
+                <p>Thank you for participating in this study, <strong id="alias"></strong>!</p>
+                <p>Your responses have been recorded and will contribute to our research.</p>
+                <p>You may now close this tab to end the study.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        const session = getQueryParam('session');
+        const alias = getQueryParam('alias');
+
+        // Update the header and content dynamically
+        document.getElementById('alias').innerText = alias;
+        document.getElementById('session-header').innerText = `Study Completed`;
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mhri"
+version = "0.0.1"
+
+description = "multi-step intent MCTS"
+readme = "README.md"
+requires-python = ">=3.9"
+
+license = {file = "LICENSE.txt"}
+
+keywords = ["Reinforcement Learning", "Artificial Intelligence", "Robotics"]
+
+authors = [
+  {name = "example", email = "example@example.com"}
+]
+
+maintainers = [
+  {name = "Example", email = "example@example.com"}
+]
+
+dependencies = [
+  "gymnasium==0.29.1",
+  "numpy",
+  "matplotlib==3.9.2",
+  "hydra-core==1.3.2",
+  "tqdm==4.66.5",
+  "websockets==13.0.1",
+]
+
+# [project.optional-dependencies]
+# dev = ["check-manifest"]
+# test = ["coverage"]
+
+# [project.urls]
+# "Homepage" = "https://github.com/pypa/sampleproject"
+
+# [project.scripts]
+# example = "examples/sample:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}

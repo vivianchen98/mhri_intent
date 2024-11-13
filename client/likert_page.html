@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End of Session Survey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=San+Francisco+Display:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'San Francisco Display', Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            font-size: 24px;
+            border-bottom: 1px solid #cccccc;
+        }
+
+        #content {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #survey-form {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+        }
+
+        .question p {
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .likert {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .likert .likert-legend {
+            flex: 0 0 80px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .likert input {
+            margin-right: 10px;
+        }
+
+        .likert-options {
+            display: flex;
+            justify-content: space-between;
+            flex: 1;
+        }
+
+        .likert-options label {
+            flex: 1;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        #submit-button {
+            padding: 15px 20px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #submit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="session-header"></header>
+    <div id="content">
+        <form id="survey-form">
+            <div class="question">
+                <p>1. How mentally demanding was the task?</p>
+                <div class="likert">
+                    <span class="likert-legend">Very Low</span>
+                    <div class="likert-options">
+                        <label><input type="radio" name="question1_mental" value="1" required> 1</label>
+                        <label><input type="radio" name="question1_mental" value="2" required> 2</label>
+                        <label><input type="radio" name="question1_mental" value="3" required> 3</label>
+                        <label><input type="radio" name="question1_mental" value="4" required> 4</label>
+                        <label><input type="radio" name="question1_mental" value="5" required> 5</label>
+                        <label><input type="radio" name="question1_mental" value="6" required> 6</label>
+                        <label><input type="radio" name="question1_mental" value="7" required> 7</label>
+                    </div>
+                    <span class="likert-legend">Very High</span>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>2. How physically demanding was the task?</p>
+                <div class="likert">
+                    <span class="likert-legend">Very Low</span>
+                    <div class="likert-options">
+                        <label><input type="radio" name="question2_physical" value="1" required> 1</label>
+                        <label><input type="radio" name="question2_physical" value="2" required> 2</label>
+                        <label><input type="radio" name="question2_physical" value="3" required> 3</label>
+                        <label><input type="radio" name="question2_physical" value="4" required> 4</label>
+                        <label><input type="radio" name="question2_physical" value="5" required> 5</label>
+                        <label><input type="radio" name="question2_physical" value="6" required> 6</label>
+                        <label><input type="radio" name="question2_physical" value="7" required> 7</label>
+                    </div>
+                    <span class="likert-legend">Very High</span>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>3. How hurried or rushed was the pace of the task?</p>
+                <div class="likert">
+                    <span class="likert-legend">Very Low</span>
+                    <div class="likert-options">
+                        <label><input type="radio" name="question3_temporal" value="1" required> 1</label>
+                        <label><input type="radio" name="question3_temporal" value="2" required> 2</label>
+                        <label><input type="radio" name="question3_temporal" value="3" required> 3</label>
+                        <label><input type="radio" name="question3_temporal" value="4" required> 4</label>
+                        <label><input type="radio" name="question3_temporal" value="5" required> 5</label>
+                        <label><input type="radio" name="question3_temporal" value="6" required> 6</label>
+                        <label><input type="radio" name="question3_temporal" value="7" required> 7</label>
+                    </div>
+                    <span class="likert-legend">Very High</span>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>4. How insecure, discouraged, irritated, stressed, and annoyed were you?</p>
+                <div class="likert">
+                    <span class="likert-legend">Very Low</span>
+                    <div class="likert-options">
+                        <label><input type="radio" name="question4_frustration" value="1" required> 1</label>
+                        <label><input type="radio" name="question4_frustration" value="2" required> 2</label>
+                        <label><input type="radio" name="question4_frustration" value="3" required> 3</label>
+                        <label><input type="radio" name="question4_frustration" value="4" required> 4</label>
+                        <label><input type="radio" name="question4_frustration" value="5" required> 5</label>
+                        <label><input type="radio" name="question4_frustration" value="6" required> 6</label>
+                        <label><input type="radio" name="question4_frustration" value="7" required> 7</label>
+                    </div>
+                    <span class="likert-legend">Very High</span>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>5. How hard did you have to work to accomplish your level of performance?</p>
+                <div class="likert">
+                    <span class="likert-legend">Very Low</span>
+                    <div class="likert-options">
+                        <label><input type="radio" name="question5_effort" value="1" required> 1</label>
+                        <label><input type="radio" name="question5_effort" value="2" required> 2</label>
+                        <label><input type="radio" name="question5_effort" value="3" required> 3</label>
+                        <label><input type="radio" name="question5_effort" value="4" required> 4</label>
+                        <label><input type="radio" name="question5_effort" value="5" required> 5</label>
+                        <label><input type="radio" name="question5_effort" value="6" required> 6</label>
+                        <label><input type="radio" name="question5_effort" value="7" required> 7</label>
+                    </div>
+                    <span class="likert-legend">Very High</span>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>6. How successful were you in accomplishing what you were asked to do?</p>
+                <div class="likert">
+                    <span class="likert-legend">Perfect</span>
+                    <div class="likert-options">
+                        <label><input type="radio" name="question6_performance" value="1" required> 1</label>
+                        <label><input type="radio" name="question6_performance" value="2" required> 2</label>
+                        <label><input type="radio" name="question6_performance" value="3" required> 3</label>
+                        <label><input type="radio" name="question6_performance" value="4" required> 4</label>
+                        <label><input type="radio" name="question6_performance" value="5" required> 5</label>
+                        <label><input type="radio" name="question6_performance" value="6" required> 6</label>
+                        <label><input type="radio" name="question6_performance" value="7" required> 7</label>
+                    </div>
+                    <span class="likert-legend">Failure</span>
+                </div>
+            </div>
+
+            <div class="question">
+                <p>7. How satisfied are you with the performance of your partner?</p>
+                <div class="likert">
+                    <span class="likert-legend">Very Satisfied</span>
+                    <div class="likert-options">
+                        <label><input type="radio" name="question7_satisfaction" value="1" required> 1</label>
+                        <label><input type="radio" name="question7_satisfaction" value="2" required> 2</label>
+                        <label><input type="radio" name="question7_satisfaction" value="3" required> 3</label>
+                        <label><input type="radio" name="question7_satisfaction" value="4" required> 4</label>
+                        <label><input type="radio" name="question7_satisfaction" value="5" required> 5</label>
+                        <label><input type="radio" name="question7_satisfaction" value="6" required> 6</label>
+                        <label><input type="radio" name="question7_satisfaction" value="7" required> 7</label>
+                    </div>
+                    <span class="likert-legend">Not Satisfied at all</span>
+                </div>
+            </div>
+
+            <button type="submit" id="submit-button">Submit</button>
+
+        </form>
+    </div>
+
+    <script>
+        // Add WebSocket connection
+        const socket = new WebSocket('ws://localhost:12346');
+
+        socket.onopen = function (event) {
+            console.log('Connected to WebSocket server');
+        };
+
+        socket.onerror = function (error) {
+            console.error('WebSocket Error: ', error);
+        };
+
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        const session = getQueryParam('session');
+        const alias = getQueryParam('alias');
+        const method = getQueryParam('method');
+
+        document.getElementById('session-header').innerText = `Session ${session} Survey`;
+
+        // Function to send the form data to the server
+        function sendFormData(formData) {
+            socket.send(JSON.stringify({
+                type: 'likertSubmission',
+                data: formData
+            }));
+        }
+
+        // Modify the loggingResponse function to send data via WebSocket
+        function loggingResponse() {
+            const formData = {
+                session: session,
+                alias: alias,
+                method: method,
+                q1_mental: document.querySelector('input[name="question1_mental"]:checked').value,
+                q2_physical: document.querySelector('input[name="question2_physical"]:checked').value,
+                q3_temporal: document.querySelector('input[name="question3_temporal"]:checked').value,
+                q4_frustration: document.querySelector('input[name="question4_frustration"]:checked').value,
+                q5_effort: document.querySelector('input[name="question5_effort"]:checked').value,
+                q6_performance: document.querySelector('input[name="question6_performance"]:checked').value,
+                q7_satisfaction: document.querySelector('input[name="question7_satisfaction"]:checked').value
+            };
+
+            sendFormData(formData);
+        }
+
+        // Modify the form submission event listener
+        document.getElementById('survey-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const form = event.target;
+
+            if (form.checkValidity()) {
+                loggingResponse();
+
+                // Request next method from server
+                socket.send(JSON.stringify({ type: 'getNextMethod' }));
+
+                // Wait for server response before redirecting
+                socket.onmessage = function (event) {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'nextMethod') {
+                        const nextSession = data.session;
+                        const nextMethod = data.value;
+                        // Close the WebSocket connection
+                        socket.close();
+                        // Redirect to next page
+                        // If session is 0, redirect to end page
+                        if (nextSession === 0) {
+                            window.location.href = `end_page.html?session=${nextSession}&alias=${alias}&method=${nextMethod}`;
+                        } else {
+                            window.location.href = `preface.html?session=${nextSession}&alias=${alias}&method=${nextMethod}`;
+                        }
+                    }
+                };
+            } else {
+                form.reportValidity();
+            }
+        });
+    </script>
+</body>
+
+</html>

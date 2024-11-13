@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consent Form and Survey</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=San+Francisco+Display:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'San Francisco Display', Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            font-size: 24px;
+            border-bottom: 1px solid #cccccc;
+        }
+
+        #content {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #survey-form {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+        }
+
+        .question p {
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .consent-text {
+            font-size: 15px;
+            color: #555;
+        }
+
+        .consent-text strong {
+            font-weight: bold;
+        }
+
+        .email-text {
+            font-family: 'Courier New', Courier, monospace;
+            /* You can replace this with any font you prefer */
+            /* font-size: 18px; */
+            font-weight: bold;
+            /* color: #007bff; */
+            /* Optional: Change the color */
+        }
+
+        .radio-group,
+        .input-group {
+            margin-top: 15px;
+        }
+
+        .input-group input {
+            width: 40%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+
+        .radio-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #submit-button {
+            padding: 15px 20px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #submit-button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>Welcome to the Study!</header>
+    <div id="content">
+        <form id="survey-form">
+            <!-- Alias Input -->
+            <div class="question">
+                <p>Your alias in this study will be: <strong id="alias"></strong></p>
+            </div>
+
+            <!-- Consent Form -->
+            <div class="question">
+                <p><strong>Consent Form</strong></p>
+                <div class="consent-text">
+                    <p>You are invited to participate in a study exploring how humans interact with AI agents in the
+                        game <strong>Gnomes at Night</strong>. You will play the game with <strong>three AI
+                            agents</strong> and complete short surveys about your experience after each.</p>
+                    <p>Participation is voluntary, and you may withdraw at any time without penalty. The study involves
+                        no known risks, and your responses will be kept confidential. If you have questions, please
+                        contact <i>shenghui.chen@utexas.edu</i>.</p>
+                </div>
+                </br>
+                <p>Do you confirm that you are at least 18 years old and agree to participate? <span
+                        class="error-message">*</span></p>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="consent" value="agree" required> I agree to participate in this
+                        study.
+                    </label>
+                </div>
+            </div>
+
+            <!-- Age Input -->
+            <div class="question">
+                <p>What is your age? You must be above 18 to participate in this study. <span
+                        class="error-message">*</span></p>
+                <div class="input-group">
+                    <input type="number" name="age" placeholder="Your answer" min="18" max="120" required>
+                </div>
+            </div>
+
+            <!-- Gender Selection -->
+            <div class="question">
+                <p>What is your gender? <span class="error-message">*</span></p>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender" value="male" required> Male</label>
+                    <label><input type="radio" name="gender" value="female" required> Female</label>
+                    <label><input type="radio" name="gender" value="non-binary" required> Non-binary / third
+                        gender</label>
+                    <label><input type="radio" name="gender" value="prefer-not-to-say" required> Prefer not to
+                        say</label>
+                </div>
+            </div>
+
+            <button type="submit" id="submit-button">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Random alias generator
+        function generateAlias() {
+            const adjectives = [
+                'brave', 'curious', 'daring', 'eager', 'fierce', 'gentle', 'happy',
+                'intrepid', 'jovial', 'keen', 'lively', 'merry', 'noble', 'optimistic'
+            ];
+
+            const nouns = [
+                'panda', 'tiger', 'eagle', 'lion', 'otter', 'phoenix', 'unicorn', 'dragon',
+                'raven', 'dolphin', 'bear', 'wolf', 'sparrow', 'lynx'
+            ];
+
+            const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+            const noun = nouns[Math.floor(Math.random() * nouns.length)];
+            // append timestamp (3 digits) to alias to ensure uniqueness
+            return `${adjective}-${noun}-` + new Date().getTime().toString().slice(-3);
+        }
+
+        // WebSocket connection
+        const socket = new WebSocket('ws://localhost:12346');
+
+        socket.onopen = function (event) {
+            console.log('Connected to WebSocket server');
+        };
+
+        socket.onerror = function (error) {
+            console.error('WebSocket Error: ', error);
+        };
+
+        // generate an alias
+        let alias = generateAlias();
+        document.getElementById('alias').textContent = alias;
+
+        // Function to send the form data to the server
+        function sendFormData(formData) {
+            socket.send(JSON.stringify({
+                type: 'formSubmission',
+                data: formData
+            }));
+        }
+
+        // Ensure all required fields are filled before sending data
+        document.getElementById('survey-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission to allow validation
+            const form = event.target;
+
+            // Check if the form is valid
+            if (form.checkValidity()) {
+                const formData = {
+                    alias: alias,
+                    consent: document.querySelector('input[name="consent"]:checked').value,
+                    age: document.querySelector('input[name="age"]').value,
+                    gender: document.querySelector('input[name="gender"]:checked').value
+                };
+
+                // Send the form data to the server
+                sendFormData(formData);
+
+                // Request next method from server
+                socket.send(JSON.stringify({ type: 'getNextMethod' }));
+
+                // Wait for server response before redirecting
+                socket.onmessage = function (event) {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'nextMethod') {
+                        // get session ID and method from server response
+                        const session = data.session;
+                        const method = data.value;
+                        // Close the WebSocket connection
+                        socket.close();
+                        // Redirect to next page
+                        window.location.href = `preface.html?session=${session}&alias=${alias}&method=${method}`;
+                    }
+                };
+            } else {
+                // If the form is invalid, trigger native form validation UI
+                form.reportValidity();
+            }
+        });
+
+        // Remove the code for loading saved responses from localStorage
+    </script>
+</body>
+
+</html>

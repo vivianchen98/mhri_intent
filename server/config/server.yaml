@@ -1,0 +1,16 @@
+server:
+  host: localhost
+  port: 12345
+  forms_port: 12346
+
+env:
+  train_mazes: 
+    - "human"
+  token_pos: 
+    - (4, 0)
+    - (0, 4)
+    - (0, 1)
+  treasure_pos: 
+    - (4, 8)
+    - (7, 0)
+    - (8, 8)

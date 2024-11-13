@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gnomes at Night</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=San+Francisco+Display:wght@300;400;600&display=swap');
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'San Francisco Display', Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #cccccc;
+            font-size: 30px;
+            font-weight: 300;
+        }
+
+        #content {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+        }
+
+        #game-container,
+        #canvas-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid #cccccc;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        #game-container {
+            flex: 2;
+            background-color: #ffffff;
+        }
+
+        #canvas-container {
+            flex: 1;
+            background-color: #f9f9f9;
+        }
+
+        #game-wrapper,
+        #teammate-image-wrapper,
+        #canvas-wrapper,
+        #game-info-box {
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #ffffff;
+            width: 100%;
+            padding-bottom: 100%;
+            position: relative;
+        }
+
+        #instruction-box {
+            border: none;
+            padding-bottom: 0;
+            height: auto;
+            margin-bottom: 5%;
+            background-color: transparent;
+            box-shadow: none;
+            padding-right: 10px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        #timer-display {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        #instruction-box p {
+            color: inherit;
+        }
+
+        #game-info-box {
+            padding-bottom: 0;
+            height: auto;
+            /* overflow-y: auto; */
+            margin-bottom: 20%;
+            background-color: #fff;
+            font-size: 16px;
+            line-height: 1.4;
+            min-height: 25px;
+            padding-left: 5px;
+        }
+
+        #rendered-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #teammate-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #chat-container {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            background-color: #f9f9f9;
+            padding: 10px;
+            align-items: center;
+        }
+
+        #send-button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            border: none;
+            color: #ffffff;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 66%;
+            margin-top: 20px;
+            height: 60px;
+            font-size: 18px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-weight: 400;
+            color: #333;
+        }
+
+        #canvas-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* height: 100%; */
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 1;
+            object-fit: cover;
+        }
+
+        #grid-container {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 2%;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: transparent;
+            position: relative;
+            padding: 11.8% 11.8% 11.8% 11.85%;
+            box-sizing: border-box;
+        }
+
+        .grid-cell {
+            background-color: rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+            z-index: 2;
+            aspect-ratio: 1 / 1;
+        }
+
+        .grid-cell.highlighted {
+            background-color: rgba(0, 255, 0, 0.5);
+        }
+
+        #clear-grid-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #f77970;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #clear-grid-button:hover {
+            background-color: #cd3e3e;
+        }
+
+        #start-button {
+            display: none;
+            padding: 10px 15px;
+            background-color: #28a745;
+            border: none;
+            color: #ffffff;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        #start-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <header>
+        Gnomes at Night
+    </header> -->
+    <div id="content">
+        <div id="game-container">
+            <h3>Use arrow keys to move S to reach T. </h3>
+            <div id="game-wrapper">
+                <img id="rendered-frame" src="./placeholder.png" alt="Rendered Frame">
+            </div>
+            <button id="start-button">Start Game</button>
+        </div>
+        <div id="canvas-container">
+            <h3>Show Partner Intent:</h3>
+            <div id="teammate-image-wrapper">
+                <img id="teammate-image" src="./placeholder.png" alt="Teammate Image">
+            </div>
+            <div style="height: 15px;"></div>
+            <h3>Mark Your Intent:</h3>
+            <div id="grid-container">
+                <img id="canvas-overlay" src="./placeholder.png" alt="Canvas Overlay">
+                <!-- Grid cells will be added here by JavaScript -->
+            </div>
+            <button id="clear-grid-button">Clear Grid</button>
+        </div>
+        <div id="chat-container">
+            <h2>Instructions</h2>
+            <div id="instruction-box">
+                <ul>
+                    <li>Your maze is different from your partner's.</li>
+                    <li>Partner may highlight cells it wants you to follow with red dots.</li>
+                    <li>Click cells to mark your intent for the partner.</li>
+                </ul>
+            </div>
+            <div style="height: 15px;"></div>
+            <h2>Timer</h2>
+            <div id="timer-display">
+                <!-- Timer -->
+            </div>
+            <div style="height: 5%;"></div>
+            <h2>Game Information</h2>
+            <div id="game-info-box">
+                <!-- Game info such as Episode success/failure. -->
+            </div>
+            <button id="send-button">Update Intent and Switch Turn</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:12345');
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        const session = getQueryParam('session');
+        const alias = getQueryParam('alias');
+        const method = getQueryParam('method');
+
+        socket.onopen = function () {
+            console.log("Connected to the server");
+            document.getElementById('start-button').style.display = 'block';
+        };
+
+        socket.onclose = function (event) {
+            if (event.wasClean) {
+                console.log(`Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                console.error('Connection closed abruptly');
+            }
+        };
+
+        socket.onerror = function (error) {
+            console.error(`Error occurred: ${error.message}`);
+        };
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+
+            if (data.type === "game_update") {
+                const content = data.content;
+
+                if (content.rendered_frame) {
+                    updateImage('rendered-frame', content.rendered_frame);
+                    updateImage('canvas-overlay', content.rendered_frame);
+                }
+
+                if (content.teammate_image) {
+                    updateImage('teammate-image', content.teammate_image);
+                }
+
+                if (content.instruction) {
+                    updateInstructionBox(content.instruction);
+                }
+
+                // Add this block to update the timer
+                if (content.timer) {
+                    updateTimerDisplay(content.timer);
+                }
+
+                if (content.timeout === true || content.episode_complete === true) {
+                    let message = content.timeout ? "You used all 3 min in this round." : "Episode success!";
+
+                    if (content.completed === true) {
+                        updateInstructionBox(message + " Session complete, click continue to fill out a short survey.");
+                        updateSendButton("Continue", "likert_page.html");
+                        socket.close();
+                    } else {
+                        updateInstructionBox(message);
+                        updateSendButton("Continue", startNextEpisode);
+                    }
+                }
+
+            } else {
+                console.error("Unknown message type:", data.type);
+            }
+        };
+
+        function updateImage(elementId, base64Data) {
+            const img = document.getElementById(elementId);
+            img.src = 'data:image/png;base64,' + base64Data;
+        }
+
+        function updateInstructionBox(instruction) {
+            const instructionBox = document.getElementById('game-info-box');
+            instructionBox.textContent = instruction;
+        }
+
+        function updateTimerDisplay(timerString) {
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.textContent = timerString;
+        }
+
+        function updateSendButton(text, action) {
+            const sendButton = document.getElementById('send-button');
+            sendButton.textContent = text;
+            sendButton.removeEventListener('click', sendGrid);
+            if (typeof action === 'string') {
+                sendButton.addEventListener('click', function () {
+                    window.location.href = `${action}?session=${session}&alias=${alias}&method=${method}`;
+                });
+            } else {
+                sendButton.addEventListener('click', action);
+            }
+        }
+
+        function startNextEpisode() {
+            sendMessage("start_next_episode", {});
+            document.getElementById('send-button').removeEventListener('click', startNextEpisode);
+            updateSendButton("Update Intent and Switch Turn", sendGrid);
+            updateInstructionBox("");
+        }
+
+        function sendMessage(type, content) {
+            const message = JSON.stringify({
+                type: type,
+                content: content
+            });
+            socket.send(message);
+        }
+
+        function sendGrid() {
+            const gridState = [];
+            document.querySelectorAll('.grid-cell').forEach(cell => {
+                gridState.push(cell.classList.contains('highlighted') ? 1 : 0);
+            });
+            sendMessage("grid", gridState);
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+                sendMessage("move", event.key);
+            }
+        });
+
+        document.getElementById('send-button').addEventListener('click', function () {
+            sendGrid();
+            sendMessage("chat", "");
+        });
+
+        // Add new event listener for the clear grid button
+        document.getElementById('clear-grid-button').addEventListener('click', function () {
+            document.querySelectorAll('.grid-cell').forEach(cell => {
+                cell.classList.remove('highlighted');
+            });
+        });
+
+        // Add new event listener for the start button
+        document.getElementById('start-button').addEventListener('click', function () {
+            sendMessage("start", { "session": session, "method": method });
+            this.style.display = 'none';
+        });
+
+        // Grid functionality
+        const gridContainer = document.getElementById('grid-container');
+
+        function createGrid() {
+            for (let i = 0; i < 81; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('grid-cell');
+                cell.addEventListener('click', () => {
+                    cell.classList.toggle('highlighted');
+                });
+                gridContainer.appendChild(cell);
+            }
+        }
+
+        createGrid();
+    </script>
+</body>
+
+</html>

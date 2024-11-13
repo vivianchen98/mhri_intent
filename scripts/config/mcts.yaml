@@ -1,0 +1,5 @@
+n_parallel: 16
+n_trials: 10
+
+maze_id: '0000'
+intent_mode: discounted  # {"none", "single_step", "fixed", "length_inverse", "discounted"}
